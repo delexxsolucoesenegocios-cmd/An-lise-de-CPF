@@ -3,67 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Verificação de CPF · IAPol®</title>
+  <title>Análise de CPF · IAPol®</title>
   <link rel="icon" type="image/png" href="./favicon.png">
   <meta name="robots" content="noindex,nofollow" />
   <style>
     :root{
       --bg:#0a0f1a; --card:#0f1422; --line:#1e4d92;
       --brand:#1677ff; --brand-2:#0b5ed7;
-      --text:#eaf2ff; --muted:#a9c0e6; --soft:#0f203f;
-      --danger:#e5534b;
+      --text:#eaf2ff; --muted:#a9c0e6;
     }
     *{box-sizing:border-box}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);margin:0}
-    .wrap{max-width:1180px;margin:0 auto;padding:24px}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
 
+    /* Cabeçalho */
     header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
     .brand{display:flex;align-items:center;gap:12px}
     .brand img{width:54px;height:54px;object-fit:contain;border-radius:50%}
-    .brand h1{font-size:28px;margin:0;color:#d8e8ff;line-height:1.1}
-    .brand .badge{margin-top:6px;display:inline-block;padding:4px 12px;border-radius:999px;background:#0f203f;border:1px solid var(--line);color:#dbeaff;font-weight:600;font-size:12px;letter-spacing:.3px}
+    .brand h1{font-size:32px;margin:0;color:#d8e8ff;line-height:1.1}
+    .brand .badge{
+      margin-top:6px;display:inline-block;padding:6px 14px;border-radius:999px;
+      background:#0f203f;border:1px solid var(--line);color:#dbeaff;
+      font-weight:700;font-size:12px;letter-spacing:.3px
+    }
 
+    /* Cartão / formulário */
     .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.28);padding:20px}
-    .sub{color:var(--muted);margin:8px 0 12px}
-    .lgpd{color:#9bb3d8;font-size:12px;margin:0 0 14px}
+    .sub{color:var(--muted);margin:8px 0 14px}
     form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    input[type=text]{flex:1;min-width:260px;padding:12px 14px;border-radius:12px;border:1px solid #1b3b6f;background:#0f1422;color:#f0f6ff}
-    input.invalid{border-color:var(--danger);outline-color:var(--danger)}
+    input[type=text]{flex:1;min-width:280px;padding:12px 14px;border-radius:12px;border:1px solid #1b3b6f;background:#0f1422;color:#f0f6ff}
+    input.invalid{border-color:#e5534b;outline-color:#e5534b}
     button{padding:12px 16px;border-radius:12px;border:0;background:var(--brand);color:#fff;font-weight:700;cursor:pointer}
     button:hover{background:var(--brand-2)}
     .actions{display:flex;gap:8px;margin:8px 0 4px;flex-wrap:wrap}
 
-    .layout{display:grid;grid-template-columns:420px 1fr;gap:14px;margin-top:12px}
-    @media (max-width:980px){ .layout{grid-template-columns:1fr} }
-
-    .groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+    /* Grade de resultados */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:8px}
     .group{border:1px solid var(--line);border-radius:12px;padding:12px;background:#0f1422}
     .group h2{font-size:15px;margin:0 0 8px;color:#a9d1ff}
-    .group ul{list-style:none;margin:0;padding:0}
-    .group li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)}
-    .group li:last-child{border-bottom:0}
-    .group a{color:#9dc9ff;text-decoration:none}
-    .group a:hover{text-decoration:underline}
-
-    .preview{border:1px dashed var(--line);border-radius:12px;padding:10px;background:#0f1422;max-height:320px;overflow:auto;margin-top:10px}
-    .pv-item{padding:8px;border-bottom:1px solid rgba(255,255,255,.06)}
-    .pv-item:last-child{border-bottom:0}
-    .pv-title{color:#cfe3ff;font-weight:700;margin-bottom:4px}
-    .pv-url{color:#9db9e2;font-size:12px;margin-bottom:4px;word-break:break-all}
-    .pv-snippet{color:#c7d6ef;font-size:13px}
-
-    .viewer{border:1px solid var(--line);border-radius:12px;background:#0f1422}
-    .viewer-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--soft)}
-    .viewer-url{color:#9db9e2;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80%}
-    .viewer-ctrls{display:flex;gap:8px}
-    .viewer-ctrls button{padding:8px 10px;font-size:12px}
-    iframe#visor{width:100%;height:72vh;border:0;border-bottom-left-radius:12px;border-bottom-right-radius:12px;background:#0b0f1a}
+    ul{list-style:none;margin:0;padding:0}
+    li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    li:last-child{border-bottom:0}
+    a{color:#9dc9ff;text-decoration:none}
+    a:hover{text-decoration:underline}
 
     .footer{margin-top:12px;text-align:center;color:var(--muted);font-size:12px}
   </style>
-
-  <!-- jsPDF (PDF) -->
+  <!-- jsPDF (PDF) e SheetJS (XLSX) -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <div class="wrap">
@@ -71,52 +59,41 @@
       <div class="brand">
         <img src="./iapol-logo.png" alt="IAPol®" onerror="this.style.display='none'">
         <div>
-          <h1>Verificação de CPF</h1>
+          <h1>Análise de CPF</h1>
           <div class="badge">IAPol® | Inteligência Artificial Policial</div>
         </div>
       </div>
     </header>
 
     <div class="card">
-      <p class="sub">Consulta OSINT de **CPF** (público/aberto) com montagem de dorks e acesso a portais oficiais. Não contorna CAPTCHAs nem restrições de autenticação.</p>
-      <p class="lgpd"><strong>LGPD/Legal:</strong> use somente para fins legítimos, com base legal e autorização. Não armazene CPFs sem necessidade. Resultados dependem de cada portal (alguns exigem login/captcha).</p>
+      <p class="sub">
+        Análise OSINT com dorks/links úteis a partir de um número de CPF. 
+        <strong>Uso responsável (LGPD):</strong> utilize apenas com base legal e finalidade legítima; alguns portais podem exigir login/CAPTCHA.
+      </p>
 
       <form onsubmit="return gerar()">
         <input type="text" id="cpf" inputmode="numeric" autocomplete="off"
-          placeholder="Digite o CPF (ex.: 123.456.789-09)"
-          oninput="maskCPF(this)" />
+               placeholder="Digite o CPF (ex.: 123.456.789-09)" oninput="maskCPF(this)" />
         <button type="submit">Analisar</button>
       </form>
 
+      <!-- Exportações -->
       <div class="actions" id="exportBar" style="display:none">
         <button type="button" onclick="exportCSV()">Exportar CSV</button>
         <button type="button" onclick="exportPDF()">Exportar PDF</button>
+        <button type="button" onclick="exportTXT()">Exportar TXT</button>
+        <button type="button" onclick="exportXLSX()">Exportar XLSX</button>
       </div>
 
-      <div class="layout">
-        <div>
-          <div class="groups" id="groups"></div>
-          <div class="preview" id="preview" style="display:none"></div>
-        </div>
-
-        <div class="viewer">
-          <div class="viewer-head">
-            <div class="viewer-url" id="viewerUrl">Nenhum conteúdo carregado</div>
-            <div class="viewer-ctrls">
-              <button type="button" onclick="openInNewTab()">Abrir em nova aba</button>
-              <button type="button" onclick="toggleReader()">Alternar leitura</button>
-            </div>
-          </div>
-          <iframe id="visor" sandbox="allow-scripts allow-forms allow-same-origin allow-popups" referrerpolicy="no-referrer"></iframe>
-        </div>
-      </div>
+      <!-- Resultados -->
+      <div class="grid" id="results"></div>
     </div>
 
     <div class="footer">IAPol® · uso responsável (LGPD/leis vigentes)</div>
   </div>
 
 <script>
-/* ===================== CPF: máscara e validação ===================== */
+/* ================== CPF: máscara e validação ================== */
 function onlyDigits(s){ return (s||"").replace(/\D+/g,""); }
 function maskCPF(inp){
   const d = onlyDigits(inp.value).slice(0,11);
@@ -130,7 +107,7 @@ function validaCPF(cpf){
   const s = onlyDigits(cpf);
   if(s.length!==11 || /^(\d)\1{10}$/.test(s)) return false;
   const calc = (base) => {
-    let sum=0, fac = base+1;
+    let sum=0, fac=base+1;
     for(let i=0;i<base;i++) sum += parseInt(s[i],10)*(fac-i);
     const r = (sum*10)%11;
     return (r===10?0:r);
@@ -146,33 +123,28 @@ function ensureCPF(){
   return ok ? { raw: onlyDigits(input.value), fmt: input.value } : null;
 }
 
-/* ===================== Diretórios/Dorks ===================== */
-/* O modo leitura usa proxy seguro para contornar bloqueios de iframe/cors */
-const reader = url => `https://r.jina.ai/http/${url.replace(/^https?:\/\//,'')}`;
-
+/* ================== Diretórios / Dorks ================== */
 const GRUPOS = [
   ["Oficiais (Gov.br/Receita)*", [
-    // Portais oficiais: exigem CAPTCHA/autenticação — abrimos a página
-    ["Receita Federal — Comprovante de Situação do CPF (CAPTCHA)",
-      "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultaonline.aspx"],
+    ["Receita Federal — Comprovante (CAPTCHA)",
+     "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultaonline.aspx"],
     ["Gov.br — Serviços CPF (login)",
-      "https://www.gov.br/pt-br/servicos?termo=cpf"]
+     "https://www.gov.br/pt-br/servicos?termo=cpf"]
   ]],
-  ["Motores (dorks)", [
-    // Busca pelo número formatado OU sem formatação
+  ["Motores (dorks por número)", [
     ["Google","https://www.google.com/search?q=%22%CPF_FMT%%22+OR+%CPF_RAW%"],
     ["Bing","https://www.bing.com/search?q=%22%CPF_FMT%%22+OR+%CPF_RAW%"],
     ["DuckDuckGo","https://duckduckgo.com/?q=%22%CPF_FMT%%22+OR+%CPF_RAW%"]
   ]],
-  ["Transparência/Diários", [
+  ["Transparência/Diários/Justiça", [
     ["Diário Oficial (IN) — Google","https://www.google.com/search?q=site:in.gov.br+%22%CPF_FMT%%22+OR+%CPF_RAW%"],
-    ["Transparência (genérica) — Google","https://www.google.com/search?q=site:transparencia.*+%22%CPF_FMT%%22+OR+%CPF_RAW%"],
-    ["Portais *.jus.br — Google","https://www.google.com/search?q=site:*.jus.br+%22%CPF_FMT%%22+OR+%CPF_RAW%"]
+    ["Portais *.jus.br — Google","https://www.google.com/search?q=site:*.jus.br+%22%CPF_FMT%%22+OR+%CPF_RAW%"],
+    ["Transparência (genérica) — Google","https://www.google.com/search?q=site:transparencia.*+%22%CPF_FMT%%22+OR+%CPF_RAW%"]
   ]],
-  ["Documentos", [
-    ["PDF (Google)","https://www.google.com/search?q=filetype:pdf+%22%CPF_FMT%%22+OR+%CPF_RAW%"],
-    ["DOCX (Google)","https://www.google.com/search?q=filetype:docx+%22%CPF_FMT%%22+OR+%CPF_RAW%"],
-    ["XLSX (Google)","https://www.google.com/search?q=filetype:xlsx+%22%CPF_FMT%%22+OR+%CPF_RAW%"]
+  ["Documentos por número", [
+    ["PDF","https://www.google.com/search?q=filetype:pdf+%22%CPF_FMT%%22+OR+%CPF_RAW%"],
+    ["DOCX","https://www.google.com/search?q=filetype:docx+%22%CPF_FMT%%22+OR+%CPF_RAW%"],
+    ["XLSX","https://www.google.com/search?q=filetype:xlsx+%22%CPF_FMT%%22+OR+%CPF_RAW%"]
   ]]
 ];
 
@@ -181,183 +153,124 @@ function buildUrl(tpl, cpfFmt, cpfRaw){
             .replaceAll("%CPF_RAW%", encodeURIComponent(cpfRaw));
 }
 
-/* ===================== Viewer / Preview ===================== */
-function setViewer(url,{forceReader=false}={}){
-  const frame = document.getElementById("visor");
-  const vurl  = document.getElementById("viewerUrl");
-  const u = forceReader ? reader(url) : url;
-  frame.src = u;
-  vurl.textContent = u;
-  window.__viewer_current = url;
-  window.__viewer_reader  = forceReader;
-}
-function toggleReader(){
-  if(!window.__viewer_current) return;
-  setViewer(window.__viewer_current,{forceReader:!window.__viewer_reader});
-}
-function openInNewTab(){
-  if(!window.__viewer_current) return;
-  const url = window.__viewer_reader ? reader(window.__viewer_current) : window.__viewer_current;
-  window.open(url, "_blank");
-}
+/* ================== Montagem UI ================== */
+function montar(cpfFmt, cpfRaw){
+  const results = document.getElementById("results");
+  const bar = document.getElementById("exportBar");
+  results.innerHTML = "";
 
-async function openDirectory(title, url){
-  // Carrega em leitura por padrão (evita bloqueios)
-  setViewer(url,{forceReader:true});
-
-  // Prévia textual (melhor esforço)
-  const pv = document.getElementById("preview");
-  pv.style.display = "block";
-  pv.innerHTML = `<div class="pv-item"><div class="pv-title">Carregando prévia de ${title}…</div></div>`;
-  try{
-    const resp = await fetch(reader(url), {mode:"cors"});
-    if(!resp.ok) throw new Error(resp.statusText);
-    const txt = await resp.text();
-    const lines = txt.split("\n").filter(Boolean);
-    const blocks = [];
-    let acc=[];
-    for(const l of lines){
-      if((/^#|^##|\d+\.\s|•\s/).test(l) && acc.length){ blocks.push(acc.join(" ")); acc=[l]; }
-      else acc.push(l);
-      if(blocks.length>=10) break;
-    }
-    if(acc.length && blocks.length<10) blocks.push(acc.join(" "));
-    pv.innerHTML = blocks.slice(0,8).map((b,i)=>`
-      <div class="pv-item">
-        <div class="pv-title">${title} — item ${i+1}</div>
-        <div class="pv-url">${url}</div>
-        <div class="pv-snippet">${b.replace(/\s+/g," ").slice(0,320)}…</div>
-        <div style="margin-top:6px">
-          <button type="button" onclick="setViewer('${url.replace(/'/g,"\\'")}',{forceReader:false})">Abrir página original</button>
-          <button type="button" onclick="setViewer('${url.replace(/'/g,"\\'")}',{forceReader:true})">Abrir em leitura</button>
-        </div>
-      </div>
-    `).join("") || `
-      <div class="pv-item">
-        <div class="pv-title">${title}</div>
-        <div class="pv-url">${url}</div>
-        <div class="pv-snippet">Prévia indisponível. Use os botões acima.</div>
-      </div>`;
-  }catch(e){
-    pv.innerHTML = `
-      <div class="pv-item">
-        <div class="pv-title">${title}</div>
-        <div class="pv-url">${url}</div>
-        <div class="pv-snippet">Não foi possível obter a prévia agora. O visor já está em modo leitura.</div>
-      </div>`;
-  }
-}
-
-/* ===================== Montagem dos grupos ===================== */
-function montarGrupos(cpfFmt, cpfRaw){
-  const box = document.getElementById("groups");
-  box.innerHTML = "";
-  GRUPOS.forEach(([titulo,itens])=>{
-    const div = document.createElement("div");
-    div.className = "group";
+  GRUPOS.forEach(([titulo, itens])=>{
+    const box = document.createElement("div");
+    box.className = "group";
     const h2 = document.createElement("h2"); h2.textContent = titulo;
     const ul = document.createElement("ul");
 
-    itens.forEach(([label,tpl])=>{
+    itens.forEach(([label, tpl])=>{
       const li = document.createElement("li");
-      const a  = document.createElement("a");
-      const finalUrl = buildUrl(tpl, cpfFmt, cpfRaw);
-      a.textContent = label;
-      a.href = "#";
-      a.onclick = (ev)=>{ ev.preventDefault(); openDirectory(label, finalUrl); };
+      const a = document.createElement("a");
+      a.textContent = label; a.target = "_blank"; a.rel = "noopener";
+      a.href = buildUrl(tpl, cpfFmt, cpfRaw);
       li.appendChild(a); ul.appendChild(li);
     });
 
-    div.appendChild(h2); div.appendChild(ul); box.appendChild(div);
+    box.appendChild(h2); box.appendChild(ul); results.appendChild(box);
   });
+
+  bar.style.display = "flex";
 }
 
-/* ===================== Exportações ===================== */
-function buildData(cpfFmt, cpfRaw){
-  const data = [];
-  GRUPOS.forEach(([grupo, itens])=>{
-    itens.forEach(([fonte, tpl])=>{
-      data.push({grupo, fonte, url: buildUrl(tpl,cpfFmt,cpfRaw)});
+/* ================== Exportações ================== */
+function buildRows(cpfFmt, cpfRaw){
+  const rows=[];
+  GRUPOS.forEach(([grupo,itens])=>{
+    itens.forEach(([fonte,tpl])=>{
+      rows.push({CPF: cpfFmt, GRUPO: grupo, FONTE: fonte, URL: buildUrl(tpl,cpfFmt,cpfRaw)});
     });
   });
-  return data;
+  return rows;
 }
 function exportCSV(){
-  const state = window.__cpf_state;
-  if(!state){ alert("Gere os resultados antes de exportar."); return; }
-  const { cpfFmt, cpfRaw } = state;
-  const rows = buildData(cpfFmt, cpfRaw);
+  const st = window.__cpf_state;
+  if(!st){ alert("Faça a análise primeiro."); return; }
+  const rows = buildRows(st.cpfFmt, st.cpfRaw);
   let csv = "CPF;GRUPO;FONTE;URL\n";
   rows.forEach(r=>{
-    const line = [`"${cpfFmt}"`,`"${r.grupo.replace(/"/g,'""')}"`,`"${r.fonte.replace(/"/g,'""')}"`,`"${r.url.replace(/"/g,'""')}"`].join(";");
-    csv += line + "\n";
+    csv += `"${r.CPF}";"${r.GRUPO.replace(/"/g,'""')}";"${r.FONTE.replace(/"/g,'""')}";"${r.URL.replace(/"/g,'""')}"\n`;
   });
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = `IAPol_Verificacao_CPF_${cpfRaw}.csv`; a.click();
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`IAPol_Analise_CPF_${st.cpfRaw}.csv`; a.click();
+}
+function exportTXT(){
+  const st = window.__cpf_state;
+  if(!st){ alert("Faça a análise primeiro."); return; }
+  const rows = buildRows(st.cpfFmt, st.cpfRaw);
+  let txt = `IAPol® — Análise de CPF\nCPF: ${st.cpfFmt} (raw: ${st.cpfRaw})\nData: ${new Date().toLocaleString("pt-BR")}\n\n`;
+  rows.forEach(r=>{ txt += `- [${r.GRUPO}] ${r.FONTE}: ${r.URL}\n`; });
+  const blob = new Blob([txt], {type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`IAPol_Analise_CPF_${st.cpfRaw}.txt`; a.click();
 }
 function exportPDF(){
-  const state = window.__cpf_state;
-  if(!state){ alert("Gere os resultados antes de exportar."); return; }
-  const { cpfFmt, cpfRaw } = state;
+  const st = window.__cpf_state;
+  if(!st){ alert("Faça a análise primeiro."); return; }
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit:"pt", format:"a4" });
   const m=48; let y=m;
   doc.setFont("helvetica","bold"); doc.setFontSize(16);
-  doc.text("IAPol® — Verificação de CPF", m, y); y+=18;
+  doc.text("IAPol® — Análise de CPF", m, y); y+=18;
   doc.setFont("helvetica","normal"); doc.setFontSize(12);
-  doc.text(`CPF analisado: ${cpfFmt} (raw: ${cpfRaw})`, m, y); y+=8;
+  doc.text(`CPF: ${st.cpfFmt} (raw: ${st.cpfRaw})`, m, y); y+=8;
   doc.text(`Data: ${new Date().toLocaleString("pt-BR")}`, m, y); y+=18;
-  const rows = buildData(cpfFmt, cpfRaw);
+
+  const rows = buildRows(st.cpfFmt, st.cpfRaw);
   doc.setFontSize(11);
   let gAtual = "";
   rows.forEach(r=>{
-    if(r.grupo!==gAtual){
+    if(r.GRUPO!==gAtual){
       if(y>780){ doc.addPage(); y=m; }
-      gAtual = r.grupo;
-      doc.setFont("helvetica","bold"); doc.text(gAtual, m, y); y+=12;
+      gAtual=r.GRUPO; doc.setFont("helvetica","bold"); doc.text(gAtual, m, y); y+=12;
       doc.setFont("helvetica","normal");
     }
-    const ln = `• ${r.fonte}: ${r.url}`;
+    const ln = `• ${r.FONTE}: ${r.URL}`;
     const parts = doc.splitTextToSize(ln, 515);
     parts.forEach(L=>{ if(y>800){ doc.addPage(); y=m; } doc.text(L, m, y); y+=14; });
   });
+
   if(y>800){ doc.addPage(); y=m; }
   doc.setDrawColor(160); doc.line(m,820,595-m,820);
   doc.setFontSize(9); doc.setTextColor(120);
   doc.text("IAPol® · uso responsável (LGPD/leis vigentes) · Portais oficiais podem exigir CAPTCHA/login", m, 838);
-  doc.save(`IAPol_Verificacao_CPF_${cpfRaw}.pdf`);
+  doc.save(`IAPol_Analise_CPF_${st.cpfRaw}.pdf`);
+}
+function exportXLSX(){
+  const st = window.__cpf_state;
+  if(!st){ alert("Faça a análise primeiro."); return; }
+  const rows = buildRows(st.cpfFmt, st.cpfRaw);
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "AnaliseCPF");
+  XLSX.writeFile(wb, `IAPol_Analise_CPF_${st.cpfRaw}.xlsx`);
 }
 
-/* ===================== Fluxo ===================== */
+/* ================== Fluxo ================== */
 function gerar(){
-  const state = ensureCPF();
-  if(!state){
-    alert("CPF inválido. Verifique o número e tente novamente.");
-    return false;
-  }
-  const { raw: cpfRaw, fmt: cpfFmt } = state;
-  window.__cpf_state = { cpfRaw, cpfFmt };
-  history.replaceState({}, "", location.pathname + "?cpf=" + encodeURIComponent(cpfFmt));
-  document.getElementById("exportBar").style.display = "flex";
-  montarGrupos(cpfFmt, cpfRaw);
-  document.getElementById("preview").style.display="none";
-  setViewer("about:blank");
+  const st = ensureCPF();
+  if(!st){ alert("CPF inválido."); return false; }
+  window.__cpf_state = { cpfRaw: st.raw, cpfFmt: st.fmt };
+  history.replaceState({}, "", location.pathname + "?cpf=" + encodeURIComponent(st.fmt));
+  montar(st.fmt, st.raw);
   return false;
 }
 
-/* Suporte a URL ?cpf= */
+/* Carrega via ?cpf= */
 (function init(){
   const p = new URLSearchParams(location.search);
   const q = p.get("cpf");
   if(q){
     document.getElementById("cpf").value = q;
     const st = ensureCPF();
-    if(st){
-      window.__cpf_state = { cpfRaw: st.raw, cpfFmt: st.fmt };
-      document.getElementById("exportBar").style.display = "flex";
-      montarGrupos(st.fmt, st.raw);
-    }
+    if(st){ window.__cpf_state = { cpfRaw: st.raw, cpfFmt: st.fmt }; montar(st.fmt, st.raw); }
   }
 })();
 </script>
