@@ -29,7 +29,6 @@
 
     /* Cartão / formulário */
     .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.28);padding:20px}
-    .sub{color:var(--muted);margin:8px 0 14px}
     form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
     input[type=text]{flex:1;min-width:280px;padding:12px 14px;border-radius:12px;border:1px solid #1b3b6f;background:#0f1422;color:#f0f6ff}
     input.invalid{border-color:#e5534b;outline-color:#e5534b}
@@ -66,11 +65,6 @@
     </header>
 
     <div class="card">
-      <p class="sub">
-        Análise OSINT com dorks/links úteis a partir de um número de CPF. 
-        <strong>Uso responsável (LGPD):</strong> utilize apenas com base legal e finalidade legítima; alguns portais podem exigir login/CAPTCHA.
-      </p>
-
       <form onsubmit="return gerar()">
         <input type="text" id="cpf" inputmode="numeric" autocomplete="off"
                placeholder="Digite o CPF (ex.: 123.456.789-09)" oninput="maskCPF(this)" />
